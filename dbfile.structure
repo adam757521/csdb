@@ -1,0 +1,14 @@
+////////////////////////////////////////////////////
+[--------------------|PROTOCOL|--------------------]
+types:
+    - number -> automatically serialized number according to the taken bytes used by the value (varint)
+    - text -> a string followed by its size (using number)
+    - list -> same as string
+[---------------------|HEADER|---------------------]
+maps list (to init db current available maps)
+    - every map will have:
+        - name: text (unique)
+        - fields: field list
+            - every field header will have:
+                - name: text (unique)
+                - flag: contains both the type of the field and the options

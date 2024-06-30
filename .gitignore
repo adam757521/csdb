@@ -12,7 +12,6 @@ CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
 
-db.dt
 csdb.exe
 winstart.sh
 .vscode
