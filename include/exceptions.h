@@ -5,13 +5,11 @@
 
 namespace Exception
 {
-    class InvalidStringLengthException : public std::exception {
-    public:
-        InvalidStringLengthException() {}
-
-        char* what()
+    class InvalidStringLengthException : public std::exception
+    {
+        const char *what() const throw()
         {
-            return "Invalid string length";
+            return "C++ Exception";
         }
     };
 }

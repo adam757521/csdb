@@ -11,16 +11,17 @@ char createFlag(const FieldOptions &options_, const FieldType &type_)
     return options_lshifted | type_char;
 }
 
-FieldHeader::FieldHeader(const FieldOptions& options_, const FieldType& type_, const std::string& name_) : options(options_), type(type_), name(name_)
+FieldHeader::FieldHeader(const FieldOptions &options_, const FieldType &type_, const std::string &name_) : options(options_), type(type_), name(name_)
 {
-    if(name.length() > UINT8_MAX)
+    if (name.length() > UINT8_MAX)
     {
         throw Exception::InvalidStringLengthException();
     }
 }
 
-FieldHeader::FieldHeader() 
-{}
+FieldHeader::FieldHeader()
+{
+}
 
 std::string FieldHeader::GetName() const
 {
@@ -42,20 +43,20 @@ FieldType FieldHeader::GetType() const
 // - 1 byte field flags:
 //     - field types
 //     - field decorators
-void FieldHeader::Serialize(std::ostream& out) const
+void FieldHeader::Serialize(std::ostream &out) const
 {
-    out << (char) name.length();
+    out << (char)name.length();
     out << name;
     out << createFlag(options, type);
 }
 
-void FieldHeader::Deserialize(std::istream& is)
+void FieldHeader::Deserialize(std::istream &is)
 {
     char length;
     is >> length;
 
     name.resize(length);
-    is.read(name.data(), length);
+    is.read((char *)name.data(), length);
 
     char flags;
     is >> flags;
@@ -65,6 +66,6 @@ void FieldHeader::Deserialize(std::istream& is)
 
     // TODO: handle incorrect parsing
     // TODO: how will we read each option in the field
-    type = (FieldType) type_;
-    options = (FieldOptions) options_;
+    type = (FieldType)type_;
+    options = (FieldOptions)options_;
 }

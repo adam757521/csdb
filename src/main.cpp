@@ -7,7 +7,13 @@
 int main()
 {
     FieldHeader header(FieldOptions::Nullable | FieldOptions::Test, FieldType::Text, "Username");
-    std::fstream file("csdb.db");
+    std::ofstream file("csdb.db");
+
+    if (!file.is_open())
+    {
+        std::cerr << "cannot open file." << std::endl;
+        return 1;
+    }
     header.Serialize(file);
     file.close(); // to write changes
     // std::ios_base::app | std::ios_base::in | std::ios_base::out
