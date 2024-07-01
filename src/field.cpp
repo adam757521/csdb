@@ -38,34 +38,39 @@ FieldType FieldHeader::GetType() const
     return type;
 }
 
+
 // - 1 byte string size
 // - n byte string (field name)
 // - 1 byte field flags:
 //     - field types
 //     - field decorators
-void FieldHeader::Serialize(std::ostream &out) const
+std::ostream& operator<<(std::ostream& out, const FieldHeader& header)
 {
-    out << (char)name.length();
-    out << name;
-    out << createFlag(options, type);
+    out << (char)header.name.length();
+    out << header.name;
+    out << createFlag(header.options, header.type);
+
+    return out;
 }
 
-void FieldHeader::Deserialize(std::istream &is)
+std::istream& operator>>(std::istream& in, FieldHeader& header)
 {
     char length;
-    is >> length;
+    in >> length;
 
-    name.resize(length);
-    is.read((char *)name.data(), length);
+    header.name.resize(length);
+    in.read((char *)header.name.data(), length);
 
     char flags;
-    is >> flags;
+    in >> flags;
 
     char type_ = flags & 0b00001111;
     char options_ = (flags & 0b11110000) >> 4;
 
     // TODO: handle incorrect parsing
     // TODO: how will we read each option in the field
-    type = (FieldType)type_;
-    options = (FieldOptions)options_;
+    header.type = (FieldType)type_;
+    header.options = (FieldOptions)options_;
+
+    return in;
 }

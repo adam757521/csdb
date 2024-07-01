@@ -1,11 +1,11 @@
-#ifndef FIELD_H 
-#define FIELD_H 
+#ifndef FIELD_H
+#define FIELD_H
 
 #include <string>
 #include "serialization.h"
 
 enum class FieldOptions : char {
-    Nullable = 0x1, 
+    Nullable = 0x1,
     Test = 1 << 1,
 };
 
@@ -18,7 +18,7 @@ enum class FieldType {
     Text = 0x1,
 };
 
-class FieldHeader : Serializable {
+class FieldHeader {
 public:
     FieldHeader(const FieldOptions& options_, const FieldType& type_, const std::string& name_);
     FieldHeader();
@@ -28,8 +28,8 @@ public:
     FieldOptions GetOptions() const;
     FieldType GetType() const;
 
-    void Serialize(std::ostream& os) const override;
-    void Deserialize(std::istream& is) override;
+    friend std::ostream& operator<<(std::ostream& ostream, const FieldHeader& header);
+    friend std::istream& operator>>(std::istream& istream, FieldHeader& header);
 private:
     FieldOptions options;
     FieldType type;
