@@ -36,5 +36,5 @@ private:
     std::string name;
 };
 
-#endif FIELD_H 
+#endif // FIELD_H
 

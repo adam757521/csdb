@@ -51,4 +51,4 @@ T decode_pbve(const charvec_t &encoded)
     return value;
 }
 
-#endif SERIALIZABLE_H
+#endif // SERIALIZABLE_H
