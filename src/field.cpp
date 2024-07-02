@@ -70,16 +70,16 @@ std::istream& operator>>(std::istream& in, FieldHeader& header)
 
 
 std::ostream& operator<<(std::ostream& out, const FieldFlag& flag) {
-    out << (char) flag.type;
-    out << (char) flag.options;
+    out << *(char*) &flag;
     return out;
 }
 
 std::istream& operator>>(std::istream& in, FieldFlag& flag) {
-    char type;
-    in >> type;
-    char options;
-    in >> options;
-    flag = FieldFlag((FieldType) type, (FieldOptions) options);
+    union {
+        FieldFlag out_flag;
+        char byte;
+    };
+    in >> byte;
+    flag = out_flag;
     return in;
 }
