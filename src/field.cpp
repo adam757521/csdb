@@ -2,16 +2,9 @@
 #include <exceptions.h>
 #include <iostream>
 
-char createFlag(const FieldOptions &options_, const FieldType &type_)
-{
-    char type_char = (char)type_;
-    char options_char = (char)options_;
+FieldFlag::FieldFlag(const FieldType& type, const FieldOptions& options) : type(type), options(options) {}
 
-    char options_lshifted = options_char << 4;
-    return options_lshifted | type_char;
-}
-
-FieldHeader::FieldHeader(const FieldOptions &options_, const FieldType &type_, const std::string &name_) : options(options_), type(type_), name(name_)
+FieldHeader::FieldHeader(const FieldOptions &options_, const FieldType &type_, const std::string &name_) : flag(FieldFlag(type_, options_)), name(name_)
 {
     if (name.length() > UINT8_MAX)
     {
@@ -30,12 +23,12 @@ std::string FieldHeader::GetName() const
 
 FieldOptions FieldHeader::GetOptions() const
 {
-    return options;
+    return this->flag.options;
 }
 
 FieldType FieldHeader::GetType() const
 {
-    return type;
+    return this->flag.type;
 }
 
 
@@ -48,7 +41,7 @@ std::ostream& operator<<(std::ostream& out, const FieldHeader& header)
 {
     out << (char)header.name.length();
     out << header.name;
-    out << createFlag(header.options, header.type);
+    out << header.flag;
 
     return out;
 }
@@ -69,8 +62,24 @@ std::istream& operator>>(std::istream& in, FieldHeader& header)
 
     // TODO: handle incorrect parsing
     // TODO: how will we read each option in the field
-    header.type = (FieldType)type_;
-    header.options = (FieldOptions)options_;
+    header.flag.type = (FieldType)type_;
+    header.flag.options = (FieldOptions)options_;
 
+    return in;
+}
+
+
+std::ostream& operator<<(std::ostream& out, const FieldFlag& flag) {
+    out << (char) flag.type;
+    out << (char) flag.options;
+    return out;
+}
+
+std::istream& operator>>(std::istream& in, FieldFlag& flag) {
+    char type;
+    in >> type;
+    char options;
+    in >> options;
+    flag = FieldFlag((FieldType) type, (FieldOptions) options);
     return in;
 }

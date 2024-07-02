@@ -14,8 +14,20 @@ inline FieldOptions operator|(FieldOptions a, FieldOptions b)
     return (FieldOptions)((char)a | (char)b);
 }
 
-enum class FieldType {
+enum class FieldType : char {
     Text = 0x1,
+};
+
+// NOTE: bitfield structs https://en.wikipedia.org/wiki/Bit_field
+struct FieldFlag {
+    FieldType type : 4;
+    FieldOptions options : 4;
+
+    FieldFlag(const FieldType& type, const FieldOptions& options);
+    FieldFlag() = default;
+
+    friend std::ostream& operator<<(std::ostream& ostream, const FieldFlag& flag);
+    friend std::istream& operator>>(std::istream& istream, FieldFlag& flag);
 };
 
 class FieldHeader {
@@ -31,8 +43,7 @@ public:
     friend std::ostream& operator<<(std::ostream& ostream, const FieldHeader& header);
     friend std::istream& operator>>(std::istream& istream, FieldHeader& header);
 private:
-    FieldOptions options;
-    FieldType type;
+    FieldFlag flag;
     std::string name;
 };
 
