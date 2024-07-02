@@ -14,13 +14,13 @@ int main()
         std::cerr << "cannot open file." << std::endl;
         return 1;
     }
-    header.Serialize(file);
+    file << header;
     file.close(); // to write changes
     // std::ios_base::app | std::ios_base::in | std::ios_base::out
 
     std::fstream input("csdb.db");
     FieldHeader new_header;
-    new_header.Deserialize(input);
+    input >> new_header;
     input.close();
 
     std::cout << new_header.GetName() << " type values: " << (int)new_header.GetType() << " " << (int)new_header.GetOptions() << std::endl;
