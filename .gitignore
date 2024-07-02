@@ -13,6 +13,7 @@ _deps
 CMakeUserPresets.json
 
 csdb.exe
+csdb
 winstart.sh
 .vscode
 csdb.db
