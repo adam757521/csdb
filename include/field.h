@@ -1,12 +1,11 @@
-#ifndef FIELD_H
-#define FIELD_H
+#pragma once
 
 #include <string>
 #include "serialization.h"
 
 enum class FieldOptions : char {
     Nullable = 0x1,
-    Test = 1 << 1,
+    List = 1 << 1,
 };
 
 inline FieldOptions operator|(FieldOptions a, FieldOptions b)
@@ -15,13 +14,14 @@ inline FieldOptions operator|(FieldOptions a, FieldOptions b)
 }
 
 enum class FieldType : char {
-    Text = 0x1,
+    Text,
+    VarInt,
 };
 
 // NOTE: bitfield structs https://en.wikipedia.org/wiki/Bit_field
 struct FieldFlag {
-    FieldType type : 4;
-    FieldOptions options : 4;
+    FieldType type : 3;
+    FieldOptions options : 5;
 
     FieldFlag(const FieldType& type, const FieldOptions& options);
     FieldFlag() = default;
@@ -46,6 +46,3 @@ private:
     FieldFlag flag;
     std::string name;
 };
-
-#endif // FIELD_H
-

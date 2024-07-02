@@ -3,7 +3,7 @@
 types:
     - number -> automatically serialized number according to the taken bytes used by the value (varint)
     - text -> a string followed by its size (using number)
-    - list -> same as string
+    - list -> same as string ()
 [---------------------|HEADER|---------------------]
 maps list (to init db current available maps)
     - every map will have:
@@ -12,3 +12,16 @@ maps list (to init db current available maps)
             - every field header will have:
                 - name: text (unique)
                 - flag: contains both the type of the field and the options
+
+
+Structure of List:
+[2 BYTES SIZE] [[4 BYTES VALUE 1], [4 BYTE VALUE 2]]
+
+List[List[List[U32]]]
+
+0 1[0 1[0 1 [0 0 0 1]]]
+^^^
+first list size
+size: 1
+buffer: sizeof(List[List[U32]]) * size
+

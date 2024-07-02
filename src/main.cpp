@@ -6,7 +6,7 @@
 
 int main()
 {
-    FieldHeader header(FieldOptions::Nullable | FieldOptions::Test, FieldType::Text, "Username");
+    FieldHeader header(FieldOptions::Nullable | FieldOptions::List, FieldType::Text, "Username");
     std::ofstream file("csdb.db");
 
     if (!file.is_open())

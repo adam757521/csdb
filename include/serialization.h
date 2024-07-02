@@ -1,18 +1,11 @@
-#ifndef SERIALIZABLE_H
-#define SERIALIZABLE_H
+#pragma once
 
 #include <iostream>
 #include <vector>
 
-class Serializable
-{
-public:
-    virtual void Serialize(std::ostream &os) const = 0;
-    virtual void Deserialize(std::istream &is) = 0;
-};
-
 using charvec_t = std::vector<char>;
 
+// TODO: understand where negative bit is stored in signed integers, and convert unsigned and signed integers into a uniform representation of data
 template <typename T>
 charvec_t encode_pbve(T value)
 {
@@ -20,11 +13,11 @@ charvec_t encode_pbve(T value)
 
     do
     {
-        char byte = value & 0x7F;
+        char byte = value & 0b01111111;
         value >>= 7;
 
         if (value != 0)
-            byte |= 0x80;
+            byte |= 0b10000000;
         encoded.push_back(byte);
     } while (value != 0);
 
@@ -50,5 +43,3 @@ T decode_pbve(const charvec_t &encoded)
 
     return value;
 }
-
-#endif // SERIALIZABLE_H
