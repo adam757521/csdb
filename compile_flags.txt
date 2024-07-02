@@ -1,6 +1,6 @@
 -I./include
 -xc++
--std=c++2a
+-std=c++17
 -Wall
 -Wextra
 -pedantic
