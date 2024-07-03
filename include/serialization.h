@@ -43,17 +43,22 @@ T decode_pbve(const charvec_t &encoded)
     return value;
 }
 
-// NOTE: Enstricted to signed types. 
+// used from https://lemire.me/blog/2022/11/25/making-all-your-integers-positive-with-zigzag-encoding/
+
+// NOTE: Enstricted to signed types.
 template <typename T, typename = typename std::enable_if<std::is_signed<T>::value>::type>
 charvec_t encode_zigzag(T value)
 {
-    typename std::make_unsigned<T>::type abs_v = (value >> 1) ^ (value << (sizeof(T) - 1));
-    return encode_pbve(abs_v);
+    using unsigned_t = typename std::make_unsigned<T>::type;
+    unsigned_t abs = (2 * value) ^ (value >> (sizeof(T) * 8 - 1));
+    return encode_pbve<unsigned_t>(abs);
 }
 
-// NOTE: Enstricted to signed types. 
+// NOTE: Enstricted to signed types.
 template <typename T, typename = typename std::enable_if<std::is_signed<T>::value>::type>
-T decode_zigzag(const charvec_t& b)
+T decode_zigzag(const charvec_t &b)
 {
-    return decode_pbve(b);
+    using unsigned_t = typename std::make_unsigned<T>::type;
+    unsigned_t n = decode_pbve<unsigned_t>(b);
+    return (n >> 1) ^ (-(n & 1));
 }

@@ -6,8 +6,10 @@
 
 int main()
 {
-    char a = decode_zigzag<char>(encode_zigzag<char>(-5));
-    std::cout << signed(a) << std::endl;
+    // char a = decode_zigzag<char>(encode_zigzag<char>(-5));
+    // std::cout << signed(a) << std::endl;
+    auto buff = encode_zigzag<int>(INT32_MAX);
+    std::cout << decode_zigzag<int>(buff) << std::endl;
     return 0;
 
     FieldHeader header(FieldOptions::Nullable | FieldOptions::List, FieldType::Text, "Username");
