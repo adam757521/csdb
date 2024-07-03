@@ -6,6 +6,10 @@
 
 int main()
 {
+    char a = decode_zigzag<char>(encode_zigzag<char>(-5));
+    std::cout << signed(a) << std::endl;
+    return 0;
+
     FieldHeader header(FieldOptions::Nullable | FieldOptions::List, FieldType::Text, "Username");
     std::ofstream file("csdb.db");
 

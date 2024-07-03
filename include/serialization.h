@@ -5,7 +5,6 @@
 
 using charvec_t = std::vector<char>;
 
-// TODO: understand where negative bit is stored in signed integers, and convert unsigned and signed integers into a uniform representation of data
 template <typename T>
 charvec_t encode_pbve(T value)
 {
@@ -42,4 +41,19 @@ T decode_pbve(const charvec_t &encoded)
     }
 
     return value;
+}
+
+// NOTE: Enstricted to signed types. 
+template <typename T, typename = typename std::enable_if<std::is_signed<T>::value>::type>
+charvec_t encode_zigzag(T value)
+{
+    typename std::make_unsigned<T>::type abs_v = (value >> 1) ^ (value << (sizeof(T) - 1));
+    return encode_pbve(abs_v);
+}
+
+// NOTE: Enstricted to signed types. 
+template <typename T, typename = typename std::enable_if<std::is_signed<T>::value>::type>
+T decode_zigzag(const charvec_t& b)
+{
+    return decode_pbve(b);
 }
