@@ -1,17 +1,16 @@
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#pragma once
 
 #include <exception>
+#include <string>
 
 namespace Exception
 {
-    class InvalidStringLengthException : public std::exception
+    // expection when the string has a length bigger than UINT8_MAX
+    class InvalidStringLength : public std::exception
     {
         const char *what() const throw()
         {
-            return "C++ Exception";
+            return "invalid string length";
         }
     };
 }
-
-#endif
